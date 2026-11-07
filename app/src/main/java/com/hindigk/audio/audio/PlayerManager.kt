@@ -2,8 +2,9 @@ package com.hindigk.audio.audio
 
 import android.content.ComponentName
 import android.content.Context
+import android.os.Handler
+import android.os.Looper
 import android.util.Log
-import androidx.core.content.ContextCompat
 import androidx.media3.common.MediaItem
 import androidx.media3.common.MediaMetadata
 import androidx.media3.session.MediaController
@@ -46,7 +47,8 @@ object PlayerManager {
             }
         }
         val f = future ?: return
-        ContextCompat.getMainExecutor(app).execute {
+        val mainExecutor = java.util.concurrent.Executor { r -> Handler(Looper.getMainLooper()).post(r) }
+        mainExecutor.execute {
             try {
                 if (controller == null) controller = f.get()
             } catch (e: Exception) {

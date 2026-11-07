@@ -6,8 +6,6 @@ import android.content.pm.PackageManager
 import android.os.Build
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
-import androidx.core.app.ActivityCompat
-import androidx.core.content.ContextCompat
 import androidx.media3.common.MediaItem
 import androidx.media3.common.Player
 import com.hindigk.audio.R
@@ -23,7 +21,7 @@ class MainActivity : AppCompatActivity() {
     private val fragments = arrayOfNulls<CategoryFragment>(blogs.size)
     private var currentBlogPos = 0
 
-    private val playerListener = object : Player.Listener() {
+    private val playerListener = object : Player.Listener {
         override fun onIsPlayingChanged(isPlaying: Boolean) { safe { updateMini() } }
         override fun onPlaybackStateChanged(playbackState: Int) { safe { updateMini() } }
         override fun onMediaItemTransition(mediaItem: MediaItem?, reason: Int) { safe { updateMini() } }
@@ -120,7 +118,8 @@ class MainActivity : AppCompatActivity() {
     }
 
     fun updateMini() {
-        val c = PlayerManager.controller ?: run {
+        val c = PlayerManager.controller
+        if (c == null) {
             binding.miniCard.visibility = android.view.View.GONE
             return
         }
@@ -139,12 +138,10 @@ class MainActivity : AppCompatActivity() {
 
     private fun requestNotificationPermission() {
         if (Build.VERSION.SDK_INT >= 33 &&
-            ContextCompat.checkSelfPermission(this, Manifest.permission.POST_NOTIFICATIONS)
+            checkSelfPermission(Manifest.permission.POST_NOTIFICATIONS)
             != PackageManager.PERMISSION_GRANTED
         ) {
-            ActivityCompat.requestPermissions(
-                this, arrayOf(Manifest.permission.POST_NOTIFICATIONS), 101
-            )
+            requestPermissions(arrayOf(Manifest.permission.POST_NOTIFICATIONS), 101)
         }
     }
 

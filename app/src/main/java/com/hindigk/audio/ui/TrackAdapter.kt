@@ -1,9 +1,9 @@
 package com.hindigk.audio.ui
 
-import android.graphics.drawable.Drawable
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.graphics.Color
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
@@ -16,8 +16,6 @@ class TrackAdapter(
 ) : ListAdapter<Track, TrackAdapter.VH>(Diff) {
 
     private var currentPlaying = -1
-    private var bgNormal: Drawable? = null
-    private var bgPlaying: Drawable? = null
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): VH {
         val b = ItemTrackBinding.inflate(LayoutInflater.from(parent.context), parent, false)
@@ -26,24 +24,20 @@ class TrackAdapter(
 
     override fun onBindViewHolder(holder: VH, position: Int) {
         val t = getItem(position)
+        val ctx = holder.b.root.context
         holder.b.tvIndex.text = (position + 1).toString()
         holder.b.tvTrackName.text = t.name
         val playing = position == currentPlaying
         holder.b.ivPlaying.visibility = if (playing) View.VISIBLE else View.GONE
-        if (bgPlaying == null) {
-            bgPlaying = ContextCompat.getDrawable(holder.b.root.context, R.drawable.bg_index_playing)
-        }
-        if (bgNormal == null) {
-            bgNormal = ContextCompat.getDrawable(holder.b.root.context, R.drawable.bg_index)
-        }
-        holder.b.tvIndex.background = if (playing) bgPlaying else bgNormal
-        if (playing) {
-            holder.b.tvTrackName.setTextColor(ContextCompat.getColor(holder.b.root.context, R.color.brand))
-            holder.b.tvIndex.setTextColor(android.graphics.Color.WHITE)
-        } else {
-            holder.b.tvTrackName.setTextColor(ContextCompat.getColor(holder.b.root.context, R.color.text_main))
-            holder.b.tvIndex.setTextColor(ContextCompat.getColor(holder.b.root.context, R.color.text_sub))
-        }
+        holder.b.tvIndex.setBackgroundResource(
+            if (playing) R.drawable.bg_index_playing else R.drawable.bg_index
+        )
+        holder.b.tvTrackName.setTextColor(
+            if (playing) ctx.getColor(R.color.brand) else ctx.getColor(R.color.text_main)
+        )
+        holder.b.tvIndex.setTextColor(
+            if (playing) Color.WHITE else ctx.getColor(R.color.text_sub)
+        )
     }
 
     fun setPlaying(index: Int) {

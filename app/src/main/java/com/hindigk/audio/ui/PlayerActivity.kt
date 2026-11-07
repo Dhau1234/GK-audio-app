@@ -107,18 +107,12 @@ class PlayerActivity : AppCompatActivity() {
             handler.post(ticker)
         }
     }
-
-    private fun playerListener() = object : Player.Listener() {
+    private fun playerListener() = object : Player.Listener {
         override fun onMediaItemTransition(mediaItem: MediaItem?, reason: Int) {
             runOnUiThread { refreshAll() }
         }
         override fun onPlaybackStateChanged(playbackState: Int) { runOnUiThread { refreshAll() } }
         override fun onIsPlayingChanged(isPlaying: Boolean) { runOnUiThread { refreshAll() } }
-        override fun onPositionDiscontinuity(
-            oldPosition: androidx.media3.common.PositionInfo,
-            newPosition: androidx.media3.common.PositionInfo,
-            reason: Int
-        ) { runOnUiThread { updateProgress() } }
         override fun onPlayerError(error: PlaybackException) {
             runOnUiThread { try { Toast.makeText(this@PlayerActivity, R.string.player_error, Toast.LENGTH_SHORT).show() } catch (_: Exception) {} }
         }
