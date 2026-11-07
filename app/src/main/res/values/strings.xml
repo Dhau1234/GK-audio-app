@@ -1,9 +1,0 @@
-<resources>
-    <string name="app_name">GK Audio</string>
-    <string name="loading">लोड हो रहा है…</string>
-    <string name="error_network">सर्वर से जुड़ नहीं पाए। कृपया अपना इंटरनेट चेक करें।</string>
-    <string name="retry">फिर कोशिश करें</string>
-    <string name="no_audio">इस पोस्ट में अभी ऑडियो नहीं है</string>
-    <string name="coming_soon">ऑडियो जल्द ही आएगा</string>
-    <string name="player_error">प्लेबैक में समस्या. इंटरनेट चेक करें</string>
-</resources>
